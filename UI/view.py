@@ -14,9 +14,9 @@ class View(ft.UserControl):
 
         # graphical elements
         self._title = None
-        self.txt_name = None
 
         self.btn_graph = None
+        self.txtSoglia = None
         self.btn_countedges = None
         self.btn_search = None
 
@@ -41,15 +41,15 @@ class View(ft.UserControl):
         self._page.controls.append(self.txt_result)
         self._page.update()
 
-        #ROW with some controls
+        # ROW with some controls
         # text field for the name
-        self.txt_name = ft.TextField(
-            label="soglia",
-            width=200,
-            hint_text="Soglia (s)"
+        self.txtSoglia = ft.TextField(
+                label="soglia",
+                width=200,
+                hint_text="Soglia (s)"
         )
         self.btn_countedges = ft.ElevatedButton(text="Conta Archi", on_click=self._controller.handle_countedges)
-        row2 = ft.Row([self.txt_name, self.btn_countedges],
+        row2 = ft.Row([self.txtSoglia, self.btn_countedges],
                       alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row2)
 
@@ -67,6 +67,7 @@ class View(ft.UserControl):
         self.txt_result3 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
         self._page.controls.append(self.txt_result3)
         self._page.update()
+
     @property
     def controller(self):
         return self._controller
