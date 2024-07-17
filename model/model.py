@@ -1,5 +1,4 @@
 import networkx as nx
-
 from database.DAO import DAO
 
 
@@ -10,9 +9,11 @@ class Model:
         self._nodes = DAO.getAllChromosomes()
         self._edges = []
         self._genes = DAO.getAllGenes()
+
         self.idMap = {}
         for gene in self._genes:
             self.idMap[gene.GeneID] = gene.Chromosome  # devo mappare l'id del gene con il cromosoma, CIOè CON IL NODO
+
         self.solBest = []
 
     def creaGrafo(self):
@@ -21,6 +22,7 @@ class Model:
         # Il peso di ciascun arco dovrà essere calcolato come la somma algebrica della correlazione (tabella
         # interactions, campo Expression_Corr), facendo attenzione a contare ogni coppia di geni una sola volta.
         self._listConnectedGenes = DAO.getAllConnectedGenes()
+
         edges = {}
         # Io devo aggiungere i due cromosomi e il peso al grafo come archi, non i due geni perchè i cromosomi sono i nodi
         # per questo devo mappare l'id del gene con il cromosoma, CIOè CON IL NODO

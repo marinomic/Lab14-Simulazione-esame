@@ -14,10 +14,12 @@ class Controller:
         self._view.txt_result.controls.append(ft.Text("Grafo correttaente creato"))
         # Si visualizzi il numero di vertici e archi del grafo, e i valori minimo e massimo dei pesi degli archi.
         self._minPeso, self._maxPeso = self._model.getMinAndMaxWeight()
-        self._view.txt_result.controls.append(ft.Text(f"Numero di vertici: {len(self._model._grafo.nodes)}"))
-        self._view.txt_result.controls.append(ft.Text(f"Numero di archi: {len(self._model._grafo.edges)}"))
+        self._view.txt_result.controls.append(ft.Text(f"Numero di vertici: {self._model.get_num_of_nodes()} -- Numero di archi: {self._model.get_num_of_edges()}"))
         self._view.txt_result.controls.append(ft.Text(f"Peso minimo: {self._minPeso}"))
         self._view.txt_result.controls.append(ft.Text(f"Peso massimo: {self._maxPeso}"))
+        self._view.txtSoglia.disabled = False
+        self._view.btn_countedges.disabled = False
+        self._view.btn_search.disabled = False
         self._view.update_page()
 
     def handle_countedges(self, e):
@@ -25,17 +27,13 @@ class Controller:
         try:
             flSoglia = float(strSoglia)
         except ValueError:
-            self._view.txt_result2.controls.clear()
-            self._view.txt_result2.controls.append(
-                ft.Text("Inserire un valore numerico usando il punto come separatore decimale"))
-            self._view.update_page()
+            self._view.create_alert("Inserire un valore numerico usando il punto come separatore decimale")
             return
+
         self._view.txt_result2.controls.clear()
         if flSoglia < self._minPeso or flSoglia > self._maxPeso:
-            self._view.txt_result2.controls.append(ft.Text("Soglia non valida"))
-            self._view.update_page()
+            self._view.create_alert("Soglia non valida. Inserire un valore compreso tra il peso minimo e massimo degli archi")
             return
-        self._soglia = flSoglia
         numSmaller, numBigger = self._model.countEdges(flSoglia)
         self._view.txt_result2.controls.append(ft.Text(f"Numero di archi con peso minore di {flSoglia}: {numSmaller}"))
         self._view.txt_result2.controls.append(
@@ -43,12 +41,17 @@ class Controller:
         self._view.update_page()
 
     def handle_search(self, e):
-        if self._soglia is None:
-            self._view.txt_result3.controls.clear()
-            self._view.txt_result3.controls.append(ft.Text("Inserire prima la soglia"))
-            self._view.update_page()
+        strSoglia = self._view.txtSoglia.value
+        try:
+            flSoglia = float(strSoglia)
+        except ValueError:
+            self._view.create_alert("Inserire un valore numerico usando il punto come separatore decimale")
             return
-        path, peso = self._model.searchPath(self._soglia)
+        if flSoglia < self._minPeso or flSoglia > self._maxPeso:
+            self._view.create_alert(
+                "Soglia non valida. Inserire un valore compreso tra il peso minimo e massimo degli archi")
+            return
+        path, peso = self._model.searchPath(flSoglia)
         self._view.txt_result3.controls.clear()
         self._view.txt_result3.controls.append(ft.Text(f"Peso massimo trovato: {peso}"))
         self._view.txt_result3.controls.append(ft.Text("Percorso:"))

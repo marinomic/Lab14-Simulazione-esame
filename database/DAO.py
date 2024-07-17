@@ -24,6 +24,9 @@ class DAO:
 
     @staticmethod
     def getAllChromosomes():
+        """
+        I vertici siano tutti i cromosomi (tabella genes, colonna chromosome, considerando solo i valori diversi da 0).
+        """
         conn = DBConnect.get_connection()
 
         result = []
